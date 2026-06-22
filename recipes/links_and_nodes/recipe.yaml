@@ -1,0 +1,114 @@
+schema_version: 1
+
+context:
+  version: "2.8.1"
+
+package:
+  name: liblinks_and_nodes
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/l/liblinks_and_nodes/liblinks_and_nodes-${{ version }}.tar.gz
+  sha256: e1833d211c33ee6caf9b0a7594e73d84483ce670e70c0ddbd86367e256819464
+
+build:
+  number: 0
+  skip: not unix
+  # script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation -C with-manager=true
+  script: |
+    scons --from-env --prefix=$PREFIX --use-private-libtomcrypt
+    scons --prefix=$PREFIX install --write-env
+    # --numpy-include
+    # --from-env
+    # "--python={sys.executable}",
+    # "--python-flags={python_flags}",
+    # --use-private-libtomcrypt
+    # -j ${CPU_COUNT}
+    # --build={build_dir}
+    # --subdirs=libln,ln_daemon,file_services,lnrecorder,python
+
+    # make build INSTALL_PREFIX=$PREFIX
+
+
+  python:
+    entry_points:
+      - ln_manager = liblinks_and_nodes._manager_cli:ln_manager
+      - lnmc = liblinks_and_nodes._manager_cli:lnmc
+      - ln_notebook = liblinks_and_nodes._manager_cli:ln_notebook
+      - ln_topic_scope = liblinks_and_nodes._manager_cli:ln_topic_scope
+      - fs_sync = liblinks_and_nodes._manager_cli:fs_sync
+      - ln_generate = liblinks_and_nodes._manager_cli:ln_generate
+      - ln_daemon = liblinks_and_nodes._manager_cli:ln_daemon
+      - lnrecorder = liblinks_and_nodes._manager_cli:lnrecorder
+
+requirements:
+  build:
+    - ${{ compiler("c") }}
+    - ${{ compiler("cxx") }}
+    - ${{ stdlib("c") }}
+    - scons
+    - make
+
+  host:
+    - python >=3.10
+    - setuptools >=42
+    - wheel
+    # build against NumPy 2.x to build compatible with both 1.x and 2.x
+    - numpy >=2.0
+    - libstring_util
+    - libboost-python
+    - patchelf
+    - pip
+    - procps-ng
+    #  libtommath
+  run:
+    - python >=3.10
+    - numpy
+    - libstring_util
+    - libboost-python
+    - pygobject
+    - gtk3
+    # - vte-gtk3  # need to be released first
+
+tests:
+  - python:
+      imports:
+        - liblinks_and_nodes
+      pip_check: true
+  - requirements:
+      run:
+        - pip
+        - python
+    script:
+      - ln_manager --help
+      - lnmc --help
+      - ln_notebook --help
+      - ln_topic_scope --help
+      - fs_sync --help
+      - ln_generate --help
+      - ln_daemon --help
+      - lnrecorder --help
+
+about:
+  summary: An open-source middleware for building distributed real-time robotic systems.
+  license: MIT AND LGPL-3.0-only AND GPL-3.0-or-later AND GPL-3.0-only AND Unlicense
+  license_file:
+    - COPYING
+    - ln_runtime/COPYING
+    - python/links_and_nodes_base/COPYING.LESSER
+    - python/links_and_nodes/COPYING.LESSER
+    - python/links_and_nodes_manager/COPYING
+    - python/links_and_nodes_manager/private_pyparsing/LICENSE
+    - python/links_and_nodes_manager/resources/vendor/xtermjs/LICENSE.addon-fit.txt
+    - python/links_and_nodes_manager/resources/vendor/xtermjs/LICENSE.xterm.txt
+    - python/links_and_nodes_manager/resources/vendor/codemirror5/LICENSE
+    - python/links_and_nodes_manager/resources/vendor/novnc/LICENSE.txt
+    - python/links_and_nodes_manager/resources/vendor/novnc/vendor/pako/LICENSE
+    - external/libtomcrypt/LICENSE
+    - external/libtommath/LICENSE
+    - libln/COPYING.LESSER
+  homepage: https://gitlab.com/links_and_nodes/links_and_nodes
+
+extra:
+  recipe-maintainers:
+    - araffin

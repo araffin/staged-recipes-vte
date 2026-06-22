@@ -15,13 +15,14 @@ build:
   number: 0
   skip: not unix
   script: |
-      # ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
       autoreconf -if
       mkdir build
       cd build
       ../configure --prefix=$PREFIX
       make -j ${CPU_COUNT}
       make install
+      # Note: shall we copy the small python utils too?
+
   files:
     exclude:
       - lib/libstring_util.a
