@@ -1,0 +1,12 @@
+diff --git a/python/SConscript b/python/SConscript
+index 6d31b941..f88e6689 100644
+--- a/python/SConscript
++++ b/python/SConscript
+@@ -66,7 +66,7 @@
+ 
+ if not GetOption("no_manager"): # -> install ln_manager
+     env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager", excludes=excludes + ("parser_tests", "ln_manager"))
+-    env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager_client", excludes=excludes)
++    # env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager_client", excludes=excludes)
+     env.InstallData("$DATADIR/links_and_nodes_manager/includes", Glob("../../share/includes/*"))
+     for what in "ln_manager", "lnmc", "ln_notebook", "ln_topic_scope":

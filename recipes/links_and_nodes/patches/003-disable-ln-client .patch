@@ -1,0 +1,19 @@
+diff --git a/python/SConscript b/python/SConscript
+index 6d31b941..f88e6689 100644
+--- a/python/SConscript
++++ b/python/SConscript
+@@ -70,10 +70,10 @@ ln_scons.env_lines.append(
+
+ if not GetOption("no_manager"): # -> install ln_manager
+     env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager", excludes=excludes + ("parser_tests", "ln_manager"))
+-    if python_version_at_least(3, 11):
+-        env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager_client", excludes=excludes)
+-    else:
+-        print("skipping links_and_nodes_manager_client install: requires Python >= 3.11")
++    # if python_version_at_least(3, 11):
++    #     env.install_files("$PREFIX/$PYTHON_LIB", "links_and_nodes_manager_client", excludes=excludes)
++    # else:
++    #     print("skipping links_and_nodes_manager_client install: requires Python >= 3.11")
+     env.InstallData("$DATADIR/links_and_nodes_manager/includes", Glob("../../share/includes/*"))
+     for what in "ln_manager", "lnmc", "ln_notebook", "ln_topic_scope":
+         env.replace_shebang(what + "_entry", "links_and_nodes_manager/" + what, env["PYTHON_SHEBANG"])

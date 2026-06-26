@@ -10,13 +10,16 @@ package:
 source:
   url: https://pypi.org/packages/source/l/liblinks_and_nodes/liblinks_and_nodes-${{ version }}.tar.gz
   sha256: e1833d211c33ee6caf9b0a7594e73d84483ce670e70c0ddbd86367e256819464
+  patches:
+    - patches/001-fix-unittest-scons.patch
+    - patches/002-disable-ln-client.patch
 
 build:
   number: 0
   skip: not unix
   # script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation -C with-manager=true
   script: |
-    scons --from-env --prefix=$PREFIX --use-private-libtomcrypt
+    scons --from-env --prefix=$PREFIX --subdirs=libln,ln_daemon,file_services,lnrecorder,python
     scons --prefix=$PREFIX install --write-env
     # --numpy-include
     # --from-env
@@ -48,6 +51,7 @@ requirements:
     - ${{ stdlib("c") }}
     - scons
     - make
+    - pkg-config
 
   host:
     - python >=3.10
@@ -60,6 +64,7 @@ requirements:
     - patchelf
     - pip
     - procps-ng
+    - libtomcrypt
     #  libtommath
   run:
     - python >=3.10
@@ -68,6 +73,7 @@ requirements:
     - libboost-python
     - pygobject
     - gtk3
+    - libtomcrypt
     # - vte-gtk3  # need to be released first
 
 tests:

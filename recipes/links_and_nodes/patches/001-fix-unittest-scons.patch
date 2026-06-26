@@ -1,0 +1,21 @@
+diff --git a/libln/SConscript b/libln/SConscript
+index ea274828..7d8d82f2 100644
+--- a/libln/SConscript
++++ b/libln/SConscript
+@@ -84,8 +84,6 @@ env.InstallHeader ("$PREFIX/include/ln", Glob("include/ln/*"))
+ env.InstallData   ("$DATADIR/libln", "COPYING.LESSER")
+ env.InstallData   ("$PREFIX/lib/cmake/liblinks_and_nodes", "cmake/liblinks_and_nodes-config.cmake")
+
+-if not GetOption("crosscompiling"):
+-    SConscript("unittests/SConscript", exports=dict(env=cenv))
+
+ build_test = GetOption("test")
+ if build_test:
+
+@@ -217,7 +217,7 @@ subdirs = [
+    "libln",
+    ("ln_runtime", runtimes),
+    "python",
+-    "documentation"
++    # "documentation"
+]
