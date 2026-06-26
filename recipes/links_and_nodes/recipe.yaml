@@ -2,25 +2,37 @@ schema_version: 1
 
 context:
   version: "2.8.1"
+  name: links_and_nodes
 
 package:
-  name: liblinks_and_nodes
+  name: lib${{ name }}
   version: ${{ version }}
 
 source:
-  url: https://pypi.org/packages/source/l/liblinks_and_nodes/liblinks_and_nodes-${{ version }}.tar.gz
-  sha256: e1833d211c33ee6caf9b0a7594e73d84483ce670e70c0ddbd86367e256819464
-  patches:
-    - patches/001-fix-unittest-scons.patch
-    - patches/002-disable-ln-client.patch
+  # url: https://pypi.org/packages/source/l/liblinks_and_nodes/liblinks_and_nodes-${{ version }}.tar.gz
+  # sha256: e1833d211c33ee6caf9b0a7594e73d84483ce670e70c0ddbd86367e256819464
+  url: https://gitlab.com/links_and_nodes/${{ name }}/-/archive/${{ version }}/${{ name }}-${{ version }}.tar.gz
+  sha256: c619be5031b982efce3cc146d58a7a950968b9aa7f918ed477e2220950202c63
+  # patches:
+  #   - patches/004-fix-libtommyscrypt-scons.patch
+  # patches:
+  #   - patches/001-fix-unittest-scons.patch
+  #   - patches/002-disable-ln-client.patch
+  #   # Note: need to fix Checking for C function crypt_mp_init()... no
+  #   # FIXME: LN generate missing from PyPi source dist (because no extension)
+  #   # FIXME: LN Manager client missing from PyPi source dist
+  # FIXME: patch echo "#define LIBLN_VERSION" that needs git describe
+  # FIXME: package also `python_pkg` with scons to have liblinks_and_nodes
 
 build:
   number: 0
   skip: not unix
   # script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation -C with-manager=true
   script: |
-    scons --from-env --prefix=$PREFIX --subdirs=libln,ln_daemon,file_services,lnrecorder,python
-    scons --prefix=$PREFIX install --write-env
+    scons --from-env --prefix=$PREFIX \
+      --subdirs=libln,ln_daemon,file_services,lnrecorder,python
+    scons --from-env --prefix=$PREFIX install --write-env \
+      --subdirs=libln,ln_daemon,file_services,lnrecorder,python
     # --numpy-include
     # --from-env
     # "--python={sys.executable}",
@@ -52,15 +64,17 @@ requirements:
     - scons
     - make
     - pkg-config
+    # build against NumPy 2.x to build compatible with both 1.x and 2.x
+    - numpy >=2.0
 
   host:
     - python >=3.10
     - setuptools >=42
     - wheel
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
-    - numpy >=2.0
+    # - numpy >=2.0
     - libstring_util
-    - libboost-python
+    - libboost-python-devel
     - patchelf
     - pip
     - procps-ng
@@ -70,16 +84,17 @@ requirements:
     - python >=3.10
     - numpy
     - libstring_util
-    - libboost-python
     - pygobject
     - gtk3
     - libtomcrypt
+    - libtommath
     # - vte-gtk3  # need to be released first
 
 tests:
   - python:
       imports:
-        - liblinks_and_nodes
+        # - liblinks_and_nodes
+        - links_and_nodes
       pip_check: true
   - requirements:
       run:

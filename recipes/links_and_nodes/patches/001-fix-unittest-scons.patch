@@ -11,11 +11,3 @@ index ea274828..7d8d82f2 100644
 
  build_test = GetOption("test")
  if build_test:
-
-@@ -217,7 +217,7 @@ subdirs = [
-    "libln",
-    ("ln_runtime", runtimes),
-    "python",
--    "documentation"
-+    # "documentation"
-]
