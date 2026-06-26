@@ -15,8 +15,14 @@ build:
   number: 0
   skip: not unix
   script: |
-      make -j ${CPU_COUNT} -f makefile.shared PREFIX=$PREFIX install
+      # reduce libtomcrypt build times - only what we need for daemon auth:
+      #  -j ${CPU_COUNT}
+      make  -f makefile.shared \
+        CFLAGS="-DUSE_LTM -DLTM_DESC" EXTRALIBS="-ltommath" PREFIX=$PREFIX install
       # make -j ${CPU_COUNT} PREFIX=$PREFIX install
+      # CFLAGS="-DUSE_LTM -DLTM_DESC -DLTC_NO_MODES -DLTC_NO_MACS -DLTC_NO_PKCS \
+      # -DLTC_NO_MISC -DLTC_NO_PKCS -DLTC_NO_PK -DLTC_NO_CIPHERS -DLTC_NO_HASHES \
+      # -DLTC_NO_PRNGS -DLTC_DER -DLTC_MDSA -DLTC_YARROW -DLTC_CTR_MODE -DLTC_XTEA -DLTC_SHA1" \
 
   files:
     exclude:
@@ -31,8 +37,8 @@ requirements:
     # - automake
     - libtool
     - make
-  # host:
-  #   - libtommath
+  host:
+    - libtommath
 
 tests:
   - package_contents:
