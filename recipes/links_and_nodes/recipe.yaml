@@ -55,7 +55,7 @@ requirements:
     - numpy >=2.0
 
   host:
-    - python >=3.10
+    - python >=${{ python_min }}
     - setuptools >=42
     - wheel
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
@@ -67,12 +67,12 @@ requirements:
     - procps-ng
     - libtomcrypt
   run:
-    - python >=3.10
+    - python >=${{ python_min }}
     - numpy
     - libstring_util
     - pygobject
     - gtk3
-    # - gtksourceview-gtk3: run requires libintl *, for which no candidates were found.
+    # - gtksourceview-gtk3  # need to do PR for gtksourceview4:
     # - gtksourceview4: conflict from harfbuzz, libxml2, icu, ...
     - libtomcrypt
     - libtommath
@@ -98,9 +98,9 @@ tests:
     script:
       - ln_manager --help
       - lnmc --help
-      # Exception: need one of these GtkSource versions: 4, 3.0 (try apt-get install gir1.2-gtksource-4)
-      # - ln_notebook --help # (conda forge gtksourceview 5.0 is Gtk4 only)
-      # - ln_topic_scope --help # No help, needs a LN_MANAGER
+      # No help, needs a LN_MANAGER:
+      # - ln_notebook --help
+      # - ln_topic_scope --help
       - fs_sync --help
       - ln_generate --help
       - ln_daemon --help
