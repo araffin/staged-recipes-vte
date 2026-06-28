@@ -3,6 +3,7 @@ schema_version: 1
 context:
   version: "2.8.1"
   name: links_and_nodes
+  python_min: "3.10"
 
 package:
   name: lib${{ name }}
@@ -42,19 +43,6 @@ build:
 
     # make build INSTALL_PREFIX=$PREFIX
 
-
-  # FIXME: wrong entry point (would need liblinks_and_nodes)
-  # python:
-  #   entry_points:
-  #     - ln_manager = liblinks_and_nodes._manager_cli:ln_manager
-  #     - lnmc = liblinks_and_nodes._manager_cli:lnmc
-  #     - ln_notebook = liblinks_and_nodes._manager_cli:ln_notebook
-  #     - ln_topic_scope = liblinks_and_nodes._manager_cli:ln_topic_scope
-  #     - fs_sync = liblinks_and_nodes._manager_cli:fs_sync
-  #     - ln_generate = liblinks_and_nodes._manager_cli:ln_generate
-  #     - ln_daemon = liblinks_and_nodes._manager_cli:ln_daemon
-  #     - lnrecorder = liblinks_and_nodes._manager_cli:lnrecorder
-
 requirements:
   build:
     - ${{ compiler("c") }}
@@ -84,6 +72,8 @@ requirements:
     - libstring_util
     - pygobject
     - gtk3
+    # - gtksourceview-gtk3: run requires libintl *, for which no candidates were found.
+    # - gtksourceview4: conflict from harfbuzz, libxml2, icu, ...
     - libtomcrypt
     - libtommath
     # FIXME: matplotlib is missing from LN pip dependencies
@@ -109,8 +99,8 @@ tests:
       - ln_manager --help
       - lnmc --help
       # Exception: need one of these GtkSource versions: 4, 3.0 (try apt-get install gir1.2-gtksource-4)
-      # - ln_notebook --help
-      # - ln_topic_scope --help
+      # - ln_notebook --help # (conda forge gtksourceview 5.0 is Gtk4 only)
+      # - ln_topic_scope --help # No help, needs a LN_MANAGER
       - fs_sync --help
       - ln_generate --help
       - ln_daemon --help
