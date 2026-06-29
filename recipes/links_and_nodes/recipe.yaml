@@ -51,12 +51,12 @@ requirements:
     - scons
     - make
     - pkg-config
-    - python ${{ python_min }}.*
+    - python
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
     - numpy >=2.0
 
   host:
-    - python ${{ python_min }}.*
+    - python
     # - setuptools >=42
     # - wheel
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
@@ -73,7 +73,7 @@ requirements:
     - libstring_util
     - pygobject
     - gtk3
-    # - gtksourceview-gtk3  # need to do PR for gtksourceview4:
+    - gtksourceview-gtk3  # need to do PR for gtksourceview4:
     # - gtksourceview4: conflict from harfbuzz, libxml2, icu, ...
     - libtomcrypt
     - libtommath
