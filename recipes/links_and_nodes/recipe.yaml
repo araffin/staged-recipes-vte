@@ -51,13 +51,14 @@ requirements:
     - scons
     - make
     - pkg-config
+    - python ${{ python_min }}.*
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
     - numpy >=2.0
 
   host:
-    - python >=${{ python_min }}
-    - setuptools >=42
-    - wheel
+    - python ${{ python_min }}.*
+    # - setuptools >=42
+    # - wheel
     # build against NumPy 2.x to build compatible with both 1.x and 2.x
     # - numpy >=2.0
     - libstring_util
